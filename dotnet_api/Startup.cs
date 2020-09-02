@@ -1,19 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DotnetApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace dotnet_api
+namespace DotnetApi
 {
-    public class Startup
+   public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -26,6 +20,9 @@ namespace dotnet_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // should be singletone (FirebaseApp is singletone)
+            services.AddSingleton<IFirebaseRepository, FirebaseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,9 +32,7 @@ namespace dotnet_api
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();
